@@ -3,14 +3,14 @@ package com.rodion.newtabbed;
 
 
         import android.os.Bundle;
-        import android.support.v4.app.Fragment;
-        import android.support.v4.app.FragmentActivity;
-        import android.support.v4.app.FragmentManager;
-        import android.support.v4.app.FragmentPagerAdapter;
-        import android.support.v4.view.PagerAdapter;
-        import android.support.v4.view.ViewPager;
-        import android.support.v4.view.ViewPager.OnPageChangeListener;
-        import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 
 public class MainActivity extends FragmentActivity {
 
@@ -20,10 +20,13 @@ public class MainActivity extends FragmentActivity {
     ViewPager pager;
     PagerAdapter pagerAdapter;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         pager = (ViewPager) findViewById(R.id.pager);
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());//создаем адаптер
@@ -45,6 +48,8 @@ public class MainActivity extends FragmentActivity {
             public void onPageScrollStateChanged(int state) {//сообщает нам о состоянии, в котором находится скроллер (SCROLL_STATE_IDLE – ничего не скролится, SCROLL_STATE_DRAGGING – пользователь «тащит» страницу, SCROLL_STATE_SETTLING – скроллер долистывает страницу до конца)
             }
         });
+
+
     }
 
     private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
