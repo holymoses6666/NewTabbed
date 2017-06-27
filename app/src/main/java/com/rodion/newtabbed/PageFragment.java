@@ -22,8 +22,12 @@ public class PageFragment extends Fragment implements View.OnClickListener {
     int backColor;
 
     LinearLayout punkt_layout;
-    View Punkt;
+    View[][] Punkt = new View[100][100];
     LayoutInflater ltInflater;
+
+    int deloNumber;
+    int punktNumber;
+
 
 
 
@@ -60,11 +64,12 @@ public class PageFragment extends Fragment implements View.OnClickListener {
         Button createBtn = (Button)view.findViewById(R.id.create_btn);
         createBtn.setOnClickListener(this);
 
+        //Button deleteBtn = (Button)view.findViewById(R.id.delete_btn);
+        //deleteBtn.setOnClickListener(this);
+
+
+
         punkt_layout = (LinearLayout)view.findViewById(R.id.punkt_layout);
-
-
-
-
 
         return view;
     }
@@ -72,15 +77,32 @@ public class PageFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+
+        for(int i = 0; i<100; i++) {
+            if (view.getId() == i)
+                punkt_layout.removeView(Punkt[pageNumber][i]);
+        }
+
         switch (view.getId())
         {
-            case R.id.create_btn:
+            case R.id.create_btn://добавляем кнопку во fragment.xml в LinearLayout punkt_layout
 
-                Punkt  = ltInflater.inflate (R.layout.punkt, punkt_layout, false);
-               Punkt.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                Punkt.setBackgroundColor(Color.parseColor("#55336699"));
-                punkt_layout.addView(Punkt);
-               Punkt.setId(0);
+               Punkt[pageNumber][punktNumber]  = ltInflater.inflate (R.layout.punkt, punkt_layout, false);
+                Button deleteField = (Button) Punkt[pageNumber][punktNumber].findViewById(R.id.delete_btn);
+                deleteField.setId(punktNumber);
+                deleteField.setOnClickListener(this);
+               Punkt[pageNumber][punktNumber].setBackgroundColor(Color.parseColor("#55336699"));
+               punkt_layout.addView(Punkt[pageNumber][punktNumber]);
+                punktNumber++;
+
+
+                //Button deleteBtn = (Button)Punkt[pageNumber][punktNumber].findViewById(R.id.delete_btn);
+                //deleteBtn.setId(0);
+                //deleteBtn.setOnClickListener(this);
+
+               //Punkt.setId(numberPunkt);
+
+
 
                    /*
                 Button btn =  new Button(getActivity());
@@ -90,8 +112,14 @@ public class PageFragment extends Fragment implements View.OnClickListener {
                 btn.setText("click!");
                 punkt_layout.addView(btn);
 */
-
                 break;
+
+
         }
     }
+
+
+
+
+
 }

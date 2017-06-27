@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/create_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Создать кнопку"/>
-
     <TextView
         android:id="@+id/tvPage"
         android:layout_width="match_parent"
@@ -19,6 +13,13 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge">
     </TextView>
+
+    <Button
+        android:id="@+id/create_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/tvPage"
+        android:text="Создать пункт"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,6 +29,7 @@
             android:id="@+id/punkt_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             android:orientation="vertical"/>
     </ScrollView>
 </RelativeLayout>
