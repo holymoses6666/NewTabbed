@@ -2,6 +2,7 @@ package com.rodion.newtabbed;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Random;
-
 
 
 public class PageFragment extends Fragment implements View.OnClickListener {
@@ -33,6 +33,11 @@ public class PageFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "myLogs";
 
 
+    int time;
+    Button Timerr;
+
+    public int counter;
+
     static PageFragment newInstance(int page) {
         PageFragment pageFragment = new PageFragment();
         Bundle arguments = new Bundle();
@@ -44,6 +49,7 @@ public class PageFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         pageNumber = getArguments().getInt(ARGUMENT_PAGE_NUMBER);//номер страницы только при ее создании
 
         Random rnd = new Random();
@@ -51,6 +57,39 @@ public class PageFragment extends Fragment implements View.OnClickListener {
          ltInflater = LayoutInflater.from(getActivity());
 
 
+
+
+
+
+
+       /* Timer timer = new Timer();
+        long delay = 0;
+        long period = 1000;
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                time++;
+                Log.d("TAG", Integer.toString(time));
+            }
+        }, delay, period);*/
+
+
+
+       /* java.util.Timer timer = new Timer();
+        long delay = 0;
+        long period = 1000;
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                time++;
+                Log.d("myLog",Integer.toString(time));
+            }
+        },delay,period);
+
+        //Timer.setTag("timer");
+
+
+*/
 
     }
 
@@ -66,12 +105,10 @@ public class PageFragment extends Fragment implements View.OnClickListener {
         Button createBtn = (Button)view.findViewById(R.id.create_btn);
         createBtn.setOnClickListener(this);
 
-        //Button deleteBtn = (Button)view.findViewById(R.id.delete_btn);
-        //deleteBtn.setOnClickListener(this);
-
-
-
         punkt_layout = (LinearLayout)view.findViewById(R.id.punkt_layout);
+
+
+
 
         return view;
     }
@@ -79,6 +116,26 @@ public class PageFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+
+
+
+        if  (view.getTag() == "Timer")
+            new CountDownTimer(3600000, 1000)
+            {
+                public void onTick(long millisUntilFinished)
+                {
+                    Timerr.setText("seconds remaining: " +  millisUntilFinished / 1000/60);
+                    //counter++;
+                }
+
+                @Override
+                public void onFinish()
+                {
+
+
+                }
+            }.start();
+
 
         for(int i = 0; i<100; i++) {
 
@@ -89,10 +146,13 @@ public class PageFragment extends Fragment implements View.OnClickListener {
 
                 if  (view.getTag() == "checkBtn")
                     Punkt[pageNumber][i].setBackgroundColor(Color.parseColor("#55336699"));
+
+
+                   // Timerr.setText("BLYAA");
+
+
             }
         }
-
-
 
 
 
@@ -100,10 +160,10 @@ public class PageFragment extends Fragment implements View.OnClickListener {
         {
             case R.id.create_btn://добавляем кнопку во fragment.xml в LinearLayout punkt_layout
 
-               Punkt[pageNumber][punktNumber]  = ltInflater.inflate (R.layout.punkt, punkt_layout, false);
+                Punkt[pageNumber][punktNumber]  = ltInflater.inflate (R.layout.punkt, punkt_layout, false);
 
                 //кнопка удаления
-                Button deleteBtn= (Button) Punkt[pageNumber][punktNumber].findViewById(R.id.delete_btn);
+                Button deleteBtn = (Button) Punkt[pageNumber][punktNumber].findViewById(R.id.delete_btn);
                 deleteBtn.setId(punktNumber);
                 deleteBtn.setTag("deleteBtn");
                 deleteBtn.setOnClickListener(this);
@@ -115,6 +175,11 @@ public class PageFragment extends Fragment implements View.OnClickListener {
                 checkBtn.setOnClickListener(this);
 
 
+                    Timerr = Punkt[pageNumber][punktNumber].findViewById(R.id.button5);
+                    Timerr.setId(punktNumber);
+                    Timerr.setTag("Timer");
+                    Timerr.setOnClickListener(this);
+
 
                punkt_layout.addView(Punkt[pageNumber][punktNumber]);
                 punktNumber++;
@@ -122,7 +187,16 @@ public class PageFragment extends Fragment implements View.OnClickListener {
                 break;
 
         }
+
     }
+
+
+
+
+
+
+
+
 }
 
 

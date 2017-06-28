@@ -1,8 +1,7 @@
 package com.rodion.newtabbed;
 
 
-
-        import android.os.Bundle;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -18,13 +17,29 @@ public class MainActivity extends FragmentActivity {
 
     ViewPager pager;
     PagerAdapter pagerAdapter;
-
+    int time;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         pager = (ViewPager) findViewById(R.id.pager);
@@ -51,6 +66,7 @@ public class MainActivity extends FragmentActivity {
         });
 
 
+
     }
 
     private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -71,4 +87,19 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
