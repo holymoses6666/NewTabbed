@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 
 public class MainActivity extends FragmentActivity {
 
@@ -36,12 +35,14 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onPageSelected(int position) {
-                Log.d(TAG, "onPageSelected, position = " + position);//номер текущей отображенной страницы
+               // Log.d(TAG, "onPageSelected, position = " + position);//номер текущей отображаемой страницы
             }
 
             @Override
             public void onPageScrolled(int position, float positionOffset,//значение скроллера при пролистывании
                                        int positionOffsetPixels) {
+
+
             }
 
             @Override

@@ -29,7 +29,7 @@
         android:text="R"/>
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/timer"
         android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -38,7 +38,7 @@
         android:text="30"/>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/check_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
