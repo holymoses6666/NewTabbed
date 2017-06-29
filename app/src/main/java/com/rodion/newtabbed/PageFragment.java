@@ -34,7 +34,7 @@ public class PageFragment extends Fragment implements View.OnClickListener {
 
 
     int time;
-    Button Timerr;
+    Button[][] Timerr = new Button[100][100];
 
     public int counter;
 
@@ -55,7 +55,7 @@ public class PageFragment extends Fragment implements View.OnClickListener {
         Random rnd = new Random();
         backColor = Color.argb(40, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
          ltInflater = LayoutInflater.from(getActivity());
-
+        canClickTimer = true;
 
 
 
@@ -113,54 +113,67 @@ public class PageFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    CountDownTimer yourCountDownTimer;
+    public boolean canClickTimer;
+    int count;
 
     @Override
     public void onClick(View view) {
 
 
+        for (int i = 0; i < 100; i++) {
 
-        if  (view.getTag() == "Timer")
-            new CountDownTimer(3600000, 1000)
-            {
-                public void onTick(long millisUntilFinished)
-                {
-                    Timerr.setText("seconds remaining: " +  millisUntilFinished / 1000/60);
-                    //counter++;
-                }
-
-                @Override
-                public void onFinish()
-                {
-
-
-                }
-            }.start();
-
-
-        for(int i = 0; i<100; i++) {
-
-            if (view.getId() == i)
-            {
-                if  (view.getTag() == "deleteBtn")
+            if (view.getId() == i) {
+                if (view.getTag() == "deleteBtn")
                     punkt_layout.removeView(Punkt[pageNumber][i]);
 
-                if  (view.getTag() == "checkBtn")
-                    Punkt[pageNumber][i].setBackgroundColor(Color.parseColor("#55336699"));
+                if (view.getTag() == "checkBtn") {
+                    Punkt[pageNumber][i].setBackgroundColor(Color.parseColor("#6AB06A"));
+                    yourCountDownTimer.cancel();
+                    Timerr[pageNumber][count].setText("0");
 
+                }
 
-                   // Timerr.setText("BLYAA");
+                if (view.getTag() == "Timer")
+                {
+                    count = i;
 
+                    yourCountDownTimer = new CountDownTimer(60000, 1000) {
+                        public void onTick(long millisUntilFinished) {
+                            Timerr[pageNumber][count].setText("" + millisUntilFinished / 1000);
+                            //counter++;
+                            canClickTimer = false;
+                        }
 
+                        @Override
+                        public void onFinish() {
+                        }
+                    }.start();
+                }
             }
         }
 
 
 
-        switch (view.getId())
-        {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        switch (view.getId()) {
             case R.id.create_btn://добавляем кнопку во fragment.xml в LinearLayout punkt_layout
 
-                Punkt[pageNumber][punktNumber]  = ltInflater.inflate (R.layout.punkt, punkt_layout, false);
+                Punkt[pageNumber][punktNumber] = ltInflater.inflate(R.layout.punkt, punkt_layout, false);
 
                 //кнопка удаления
                 Button deleteBtn = (Button) Punkt[pageNumber][punktNumber].findViewById(R.id.delete_btn);
@@ -175,18 +188,21 @@ public class PageFragment extends Fragment implements View.OnClickListener {
                 checkBtn.setOnClickListener(this);
 
 
-                    Timerr = Punkt[pageNumber][punktNumber].findViewById(R.id.button5);
-                    Timerr.setId(punktNumber);
-                    Timerr.setTag("Timer");
-                    Timerr.setOnClickListener(this);
+                Timerr[pageNumber][punktNumber] = Punkt[pageNumber][punktNumber].findViewById(R.id.button5);
+                Timerr[pageNumber][punktNumber].setId(punktNumber);
+                Timerr[pageNumber][punktNumber].setTag("Timer");
+                Timerr[pageNumber][punktNumber].setOnClickListener(this);
 
 
-               punkt_layout.addView(Punkt[pageNumber][punktNumber]);
+                // Timerr[pageNumber][0].setText(""+punktNumber);
+                punkt_layout.addView(Punkt[pageNumber][punktNumber]);
                 punktNumber++;
 
                 break;
 
         }
+
+    }
 
     }
 
@@ -197,7 +213,7 @@ public class PageFragment extends Fragment implements View.OnClickListener {
 
 
 
-}
+
 
 
 //Button deleteBtn = (Button)Punkt[pageNumber][punktNumber].findViewById(R.id.delete_btn);
