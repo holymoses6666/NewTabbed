@@ -19,24 +19,29 @@ public class PageFragment extends Fragment implements View.OnClickListener {
 
     static final String ARGUMENT_PAGE_NUMBER = "arg_page_number";
 
-    int pageNumber;
-    int backColor;
+    int pageNumber;//номер страницы
+    int backColor;//цвет фона
 
-    LinearLayout punkt_layout;
-    View[][] Punkt = new View[100][100];
+
+    LinearLayout punkt_layout;//layout в fragment для новых кнопок
+    View[][] Punkt = new View[100][100];//view содержащий кнопки
     LayoutInflater ltInflater;
 
-    int deloNumber;
-    int punktNumber;
+    int punktNumber;//номер пункта
 
 
-    private static final String TAG = "myLogs";
+    private static final String TAG = "myLogs";//тег для дебага
+
+    Button[][] Timerr = new Button[100][100];//кнопки с таймером
+    Button restartTimerBtn[][] = new Button[100][100];
 
 
-    int time;
-    Button[][] Timerr = new Button[100][100];
+    CountDownTimer yourCountDownTimer;
+    public boolean canClickTimer;//можно ли нажимать на таймер
+    int count;//текущий номер пункта нажатой кнопки
 
-    public int counter;
+    boolean check;
+
 
     static PageFragment newInstance(int page) {
         PageFragment pageFragment = new PageFragment();
@@ -49,47 +54,11 @@ public class PageFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         pageNumber = getArguments().getInt(ARGUMENT_PAGE_NUMBER);//номер страницы только при ее создании
-
         Random rnd = new Random();
         backColor = Color.argb(40, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-         ltInflater = LayoutInflater.from(getActivity());
-        canClickTimer = true;
-
-
-
-
-
-
-       /* Timer timer = new Timer();
-        long delay = 0;
-        long period = 1000;
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                time++;
-                Log.d("TAG", Integer.toString(time));
-            }
-        }, delay, period);*/
-
-
-
-       /* java.util.Timer timer = new Timer();
-        long delay = 0;
-        long period = 1000;
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                time++;
-                Log.d("myLog",Integer.toString(time));
-            }
-        },delay,period);
-
-        //Timer.setTag("timer");
-
-
-*/
+        ltInflater = LayoutInflater.from(getActivity());
+        canStartTimer = true;
 
     }
 
@@ -107,34 +76,34 @@ public class PageFragment extends Fragment implements View.OnClickListener {
 
         punkt_layout = (LinearLayout)view.findViewById(R.id.punkt_layout);
 
-
-
-
         return view;
     }
 
-    CountDownTimer yourCountDownTimer;
-    public boolean canClickTimer;
-    int count;
 
+    boolean[][] restartTimer = new boolean[100][100];
+    boolean canStartTimer;
     @Override
     public void onClick(View view) {
 
 
         for (int i = 0; i < 100; i++) {
 
+
             if (view.getId() == i) {
-                if (view.getTag() == "deleteBtn")
+                if (view.getTag() == "deleteBtn") {
                     punkt_layout.removeView(Punkt[pageNumber][i]);
 
-                if (view.getTag() == "checkBtn") {
-                    Punkt[pageNumber][i].setBackgroundColor(Color.parseColor("#6AB06A"));
                     yourCountDownTimer.cancel();
-                    Timerr[pageNumber][count].setText("0");
-
+                    canStartTimer = true;
+                    Timerr[pageNumber][i].setText("60");
+                    restartTimer[pageNumber][i] = false;//отключаем R в нужном ряду
                 }
 
-                if (view.getTag() == "Timer")
+                if (view.getTag() == "checkBtn") {
+                    if(!check)
+                    Punkt[pageNumber][i].setBackgroundColor(Color.parseColor("#6AB06A"));
+                }
+                if (view.getTag() == "Timer" && canStartTimer )
                 {
                     count = i;
 
@@ -142,36 +111,34 @@ public class PageFragment extends Fragment implements View.OnClickListener {
                         public void onTick(long millisUntilFinished) {
                             Timerr[pageNumber][count].setText("" + millisUntilFinished / 1000);
                             //counter++;
-                            canClickTimer = false;
                         }
-
                         @Override
                         public void onFinish() {
                         }
                     }.start();
+
+                    restartTimer[pageNumber][i] = true;//работоспособен только R в нужном ряду
+                    canStartTimer = false;
                 }
+
+                if (view.getTag() == "restartTimerBtn" && restartTimer[pageNumber][i] )//если R в нужно ряду нажат
+                {
+
+                        yourCountDownTimer.cancel();
+
+                    canStartTimer = true;
+                    Timerr[pageNumber][i].setText("60");
+                    restartTimer[pageNumber][i] = false;//отключаем R в нужном ряду
+                }
+
+
+
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         switch (view.getId()) {
             case R.id.create_btn://добавляем кнопку во fragment.xml в LinearLayout punkt_layout
+
 
                 Punkt[pageNumber][punktNumber] = ltInflater.inflate(R.layout.punkt, punkt_layout, false);
 
@@ -187,11 +154,21 @@ public class PageFragment extends Fragment implements View.OnClickListener {
                 checkBtn.setTag("checkBtn");
                 checkBtn.setOnClickListener(this);
 
+                //кнопка перезапускающая таймер
+                restartTimerBtn[pageNumber][punktNumber] = (Button) Punkt[pageNumber][punktNumber].findViewById(R.id.restart);
+                restartTimerBtn[pageNumber][punktNumber].setId(punktNumber);
+                restartTimerBtn[pageNumber][punktNumber].setTag("restartTimerBtn");
+                restartTimerBtn[pageNumber][punktNumber].setOnClickListener(this);
 
+
+                //кнопка запускающая таймер
                 Timerr[pageNumber][punktNumber] = Punkt[pageNumber][punktNumber].findViewById(R.id.button5);
                 Timerr[pageNumber][punktNumber].setId(punktNumber);
                 Timerr[pageNumber][punktNumber].setTag("Timer");
                 Timerr[pageNumber][punktNumber].setOnClickListener(this);
+
+
+
 
 
                 // Timerr[pageNumber][0].setText(""+punktNumber);
@@ -199,36 +176,8 @@ public class PageFragment extends Fragment implements View.OnClickListener {
                 punktNumber++;
 
                 break;
-
         }
 
     }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-//Button deleteBtn = (Button)Punkt[pageNumber][punktNumber].findViewById(R.id.delete_btn);
-//deleteBtn.setId(0);
-//deleteBtn.setOnClickListener(this);
-
-//Punkt.setId(numberPunkt);
-
-
-
-                   /*
-                Button btn =  new Button(getActivity());
-                btn.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,  LinearLayout.LayoutParams.WRAP_CONTENT));
-                btn.setId(0);
-                btn.setText("click!");
-                punkt_layout.addView(btn);
-*/
